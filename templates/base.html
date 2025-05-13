@@ -50,6 +50,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('add_task') }}">Add Task</a>
                         </li>
+                        <!-- Add this inside the navbar, after the Add Task link -->
+                        {% if current_user.is_authenticated and current_user.is_admin %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 

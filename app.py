@@ -7,8 +7,7 @@ from forms import AddTaskForm, LoginForm, RegistrationForm
 
 app = Flask(__name__, static_folder='static')
 bootstrap = Bootstrap(app)
-app.config['SECRET_KEY'] = 'your-secret-key'
-# Change from SQLite to MySQL
+app.config['SECRET_KEY'] = 'klmecmecmdmiomowe  cowencoeniow nodeiioweono'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/todo_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -101,7 +100,35 @@ def delete_task(id):
     flash('Task deleted successfully!', 'success')
     return redirect(url_for('show_tasks'))
 
+# Add this route after your other routes
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    if not current_user.is_admin:
+        flash('You do not have permission to access the admin dashboard', 'danger')
+        return redirect(url_for('show_tasks'))
+    
+    # Get all users and their tasks
+    users = User.query.all()
+    all_tasks = Task.query.all()
+    
+    return render_template('admin_dashboard.html', users=users, tasks=all_tasks)
+
+# Add this function at the bottom of your file, before the if __name__ == '__main__' block
+def create_admin_user():
+    admin = User.query.filter_by(email='admin@example.com').first()
+    if admin is None:
+        admin = User(username='admin', email='admin@example.com', is_admin=True)
+        admin.set_password('adminpassword')  # Set a secure password in production
+        db.session.add(admin)
+        db.session.commit()
+        print('Admin user created!')
+    else:
+        print('Admin user already exists!')
+
+# Modify your if __name__ == '__main__' block
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create tables if they don't exist
+        create_admin_user()  # Create admin user if it doesn't exist
     app.run(debug=True)
