@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Add Task{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="text-center">Add Task</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.task.label(class="form-label") }}
+                {{ form.task(class="form-control") }}
+            </div>
+            <div class="mb-3 form-check">
+                {{ form.complete(class="form-check-input") }}
+                {{ form.complete.label(class="form-check-label") }}
+            </div>
+            <div class="text-center">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
